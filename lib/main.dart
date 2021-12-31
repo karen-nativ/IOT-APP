@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+
+
 
 void main() {
   runApp(const MyApp());
@@ -8,7 +12,7 @@ class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
-  }
+}
 
 
 class _MyAppState extends State<MyApp> {
@@ -41,11 +45,19 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String _result = '';
 
-  void _capture() {
+  void _classify() {
     setState(() {
       //send capture command to raspberry pi
       //receive a picture and recognition result back
+      /*
+      if(!ConnectToRaspi())
+
+        {
+          Text("Failed to connect to Raspberry Pi :(");
+        }
+       */
       _result = "Recognized {} in your picture!";
+
     });
   }
 
@@ -80,7 +92,7 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'Your picture:',
+              'Click here to classify:',
             ),
             Text(
               _result,
@@ -90,10 +102,12 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _capture,
-        tooltip: 'Capture picture',
+        onPressed: _classify,
+        tooltip: 'Classify picture',
         child: const Icon(Icons.photo_camera),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
@@ -109,7 +123,23 @@ class _StatisticsPageState extends State<StatisticsPage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Text("Statistics page body")
+      body: Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const <Widget>[
+              Text("Total things recognized: \n"),
+              Text("Bottles recognized: \n"),
+              Text("Faces recognized: \n"),
+              Text("Total accuracy: \n"),
+              ]
+            ),
+            const Text("Graph here"),
+          ],
+        ),
+      )
     );
   }
 }
@@ -117,8 +147,8 @@ class _StatisticsPageState extends State<StatisticsPage>{
 class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: const Text("About Page Body")
+    return const Scaffold(
+      body: Text("About Page Body")
     );
   }
 
@@ -136,7 +166,7 @@ class _MyDrawerState extends State<MyDrawer> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bottles or Faces'), //App bar text
+        title: const Text('Bottles or Faces'), //App bar text
       ),
       drawer: Drawer(
         child: ListView(
@@ -144,29 +174,29 @@ class _MyDrawerState extends State<MyDrawer> {
           children: <Widget>[
             ListTile(
               leading: const Icon(Icons.home),
-              title: Text('Home'),
+              title: const Text('Home'),
               onTap: () {
                 // What happens after you tap the navigation item
                 setState(() {
-                  mainWidget = HomePage();
+                  mainWidget = const HomePage();
                 });
                 Navigator.pop(context);
               },
             ),
             ListTile(
               leading: const Icon(Icons.insert_chart_outlined),
-              title: Text('Statistics'),
+              title: const Text('Statistics'),
               onTap: () {
                 // What happens after you tap the navigation item
                 setState(() {
-                  mainWidget = StatisticsPage();
+                  mainWidget = const StatisticsPage();
                 });
                 Navigator.pop(context);
               },
             ),
             ListTile(
               leading: const Icon(Icons.book),
-              title: Text('About'),
+              title: const Text('About'),
               onTap: () {
                 // What happens after you tap the navigation item
                 setState(() {
