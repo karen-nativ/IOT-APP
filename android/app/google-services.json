@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "712010388975",
+    "project_id": "iot-tflite",
+    "storage_bucket": "iot-tflite.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:712010388975:android:ad63368a806aa66bff521a",
+        "android_client_info": {
+          "package_name": "com.example.face_recognition"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "712010388975-3g7p2amd50b9n7b5t4gkmruiu69v56ve.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.face_recognition",
+            "certificate_hash": "9eaa0f99821f4d9e3f4343ef7c5deebe5b17d5d6"
+          }
+        },
+        {
+          "client_id": "712010388975-0jq2ej3505fp6am41ehk7v1lcqelhma0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQiwRLGEu3DBygjQOO6K4fFBiK0ZEoCXY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "712010388975-0jq2ej3505fp6am41ehk7v1lcqelhma0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
