@@ -1,11 +1,19 @@
+import 'dart:io';
+
 import 'package:face_recognition/screens/sign_in_screen.dart';
+import 'package:face_recognition/screens/statistics_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
+
+import 'api/firebase_api.dart';
+import 'api/firebase_file.dart';
 
 
 
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(const MyApp());
 }
 
@@ -20,7 +28,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Bottles or Faces', //Tab text
+      title: 'SecuRecognize', //Tab text
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.indigo,
@@ -52,110 +60,101 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String _result = '';
 
-  void _classify() {
+  bool clicked = false;
+
+  late Future<List<FirebaseFile>> futureFiles;
+
+  late FirebaseFile futureFile;
+
+  @override
+  void initState() {
+    super.initState();
+
+    futureFiles = FirebaseApi.listAll('logs/');
+  }
+
+  void _classify(String contents) {
     setState(() {
-      //send capture command to raspberry pi
-      //receive a picture and recognition result back
-      /*
-      if(!ConnectToRaspi())
-
-        {
-          Text("Failed to connect to Raspberry Pi :(");
-        }
-       */
-      _result = "Recognized {} in your picture!";
-
+      _result = contents;
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'Click here to classify:',
-            ),
-            Text(
-              _result,
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _classify,
-        tooltip: 'Classify picture',
-        child: const Icon(Icons.photo_camera),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      // This trailing comma makes auto-formatting nicer for build methods.
-    );
+  Future<String> downloadData() async {
+    await FirebaseApi.downloadFile(futureFile.ref);
+    final directory = await getExternalStorageDirectory();
+    String? path = directory?.path;
+    final file = File('$path/myFile.txt');
+    final contents = await file.readAsString();
+    return contents;
   }
-}
-
-class StatisticsPage extends StatefulWidget {
-  const StatisticsPage({Key? key}) : super(key: key);
 
   @override
-  State<StatisticsPage> createState() => _StatisticsPageState();
-}
-
-class _StatisticsPageState extends State<StatisticsPage>{
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     return Scaffold(
-      body: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const <Widget>[
-              Text("Total things recognized: \n"),
-              Text("Bottles recognized: \n"),
-              Text("Faces recognized: \n"),
-              Text("Total accuracy: \n"),
-              ]
-            ),
-            const Text("Graph here"),
-          ],
+      body: FutureBuilder<List<FirebaseFile>>(
+          future: futureFiles,
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
+                return Center(child: CircularProgressIndicator());
+              default:
+                if (snapshot.hasError) {
+                  return Center(child: Text('Some error occurred!'));
+                } else {
+                  final files = snapshot.data!;
+                  futureFile = files[0];
+                  return Scaffold(
+                    body: Center(
+                    // Center is a layout widget. It takes a single child and positions it
+                    // in the middle of the parent.
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            _result,
+                            style: Theme
+                                .of(context)
+                                .textTheme
+                                .headline4,
+                          ),
+                          clicked ? Text('Click here to classify again:') : Text('Click here to classify:'),
+                        ],
+                      ),
+                    ),
+                    floatingActionButton: FloatingActionButton(
+                      tooltip: 'Classify picture',
+                      child: const Icon(Icons.photo_camera),
+                      onPressed: () async {
+                        String content = await downloadData();
+                        _classify(content);
+                        //updateStatistics(contents);
+                        clicked = true;
+                      }
+                    ),
+                    floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+                  );
+                }
+            }
+          },
         ),
-      )
-    );
+      );
   }
 }
 
 class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Text("About Page Body")
+    return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text("SecuRecognize app was developed by Ofir Sagi, Karen Nativ and Romi Levy for TFLite Micro project as part of the IOT project 236333"),
+              Text(""),
+              Text("version: 1.0"),
+            ],
+          ),
+      ),
     );
   }
 
@@ -164,6 +163,7 @@ class AboutPage extends StatelessWidget {
 
 class MyDrawer extends StatefulWidget {
 
+  @override
   State<MyDrawer> createState() => _MyDrawerState();
 }
 
@@ -173,49 +173,53 @@ class _MyDrawerState extends State<MyDrawer> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Bottles or Faces'), //App bar text
+        centerTitle: true,
+        title: Text('SecuRecognize'), //App bar text
+        actions: <Widget>[
+          Image.asset('assets/app_logo.png',fit: BoxFit.contain,height: 32,),
+            ],
       ),
       drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            ListTile(
-              leading: const Icon(Icons.home),
-              title: const Text('Home'),
-              onTap: () {
-                // What happens after you tap the navigation item
-                setState(() {
-                  mainWidget = const HomePage();
-                });
-                Navigator.pop(context);
-              },
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                ListTile(
+                  leading: const Icon(Icons.home),
+                  title: const Text('Home'),
+                  onTap: () {
+                    // What happens after you tap the navigation item
+                    setState(() {
+                      mainWidget = const HomePage();
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.insert_chart_outlined),
+                  title: const Text('Statistics'),
+                  onTap: () {
+                    // What happens after you tap the navigation item
+                    setState(() {
+                      mainWidget = StatisticsPage();
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.book),
+                  title: const Text('About'),
+                  onTap: () {
+                    // What happens after you tap the navigation item
+                    setState(() {
+                      mainWidget = AboutPage();
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
             ),
-            ListTile(
-              leading: const Icon(Icons.insert_chart_outlined),
-              title: const Text('Statistics'),
-              onTap: () {
-                // What happens after you tap the navigation item
-                setState(() {
-                  mainWidget = const StatisticsPage();
-                });
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.book),
-              title: const Text('About'),
-              onTap: () {
-                // What happens after you tap the navigation item
-                setState(() {
-                  mainWidget = AboutPage();
-                });
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      ),
-      body: mainWidget,
+          ),
+        body: mainWidget,
     );
   }
 }

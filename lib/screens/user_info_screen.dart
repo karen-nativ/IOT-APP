@@ -1,7 +1,6 @@
 import 'package:face_recognition/screens/sign_in_screen.dart';
 import 'package:face_recognition/utils/authentication.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class UserInfoScreen extends StatefulWidget {

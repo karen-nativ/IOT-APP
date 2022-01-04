@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../main.dart';
+
 class GoogleSignInButton extends StatefulWidget {
   @override
   _GoogleSignInButtonState createState() => _GoogleSignInButtonState();
@@ -45,9 +47,11 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
                     builder: (context) =>
-                        UserInfoScreen(
+                        /*UserInfoScreen(
                           user: user,
                         ),
+                         */
+                        MyDrawer(),
                   ),
                 );
               }
