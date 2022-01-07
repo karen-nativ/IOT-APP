@@ -43,16 +43,6 @@ class _MyAppState extends State<MyApp> {
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -60,7 +50,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String _result = '';
 
-  bool clicked = false;
+  bool clicked_classify = false;
+  bool clicked_mood = false;
 
   late Future<List<FirebaseFile>> futureFiles;
 
@@ -117,7 +108,35 @@ class _HomePageState extends State<HomePage> {
                                 .textTheme
                                 .headline4,
                           ),
-                          clicked ? Text('Click here to classify again:') : Text('Click here to classify:'),
+                          if(clicked_classify && !clicked_mood) ... [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                FloatingActionButton(
+                                  tooltip: 'Correct!',
+                                  onPressed: () {
+                                    clicked_mood = true;
+                                    setState(() {});
+                                  },
+                                  child: const Icon(Icons.mood),
+                                ),
+                                FloatingActionButton(
+                                  tooltip: 'False!',
+                                  onPressed: () {
+                                    clicked_mood = true;
+                                    setState(() {});
+                                  },
+                                  child: const Icon(Icons.mood_bad),
+                                ),
+                              ],
+                            ),
+                            Text('Click here to classify again:'),
+                        ]
+                        else if(clicked_classify) ... [
+                            Text('Click here to classify again:'),
+                        ]
+                        else
+                          Text('Click here to classify:'),
                         ],
                       ),
                     ),
@@ -128,7 +147,8 @@ class _HomePageState extends State<HomePage> {
                         String content = await downloadData();
                         _classify(content);
                         //updateStatistics(contents);
-                        clicked = true;
+                        clicked_classify = true;
+                        clicked_mood = false;
                       }
                     ),
                     floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
