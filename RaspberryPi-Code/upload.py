@@ -16,24 +16,3 @@ def upload_file(fileName):
 
     print("your file url", blob.public_url)
 
-
-#import pyrebase
-#config = {
-#        "apiKey": "",
-#        "authDomain": "",
-#        "databaseURL": "",
-#        "storageBucket": ""
-#        }
-import datetime
-cred = credentials.Certificate("credentials.json")
-app = initialize_app(cred, {"storageBucket" : "iot-tflite.appspot.com"})
-source_blob_name = "logs/result.txt"
-bucket_name = "iot-tflite.appspot.com"
-destination_file_name = r"TEST.txt"
-
-bucket = storage.bucket(app=app)
-blob = bucket.blob(source_blob_name)
-#blob.download_to_filename(destination_file_name)
-print(blob.generate_signed_url(datetime.timedelta(seconds=3000), method='GET'))
-
-
