@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:face_recognition/screens/sign_in_screen.dart';
 import 'package:face_recognition/screens/statistics_screen.dart';
+import 'package:face_recognition/utils/statsData.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -68,13 +69,14 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _result = contents;
     });
+    Data.updateStatistics(contents);
   }
 
   Future<String> downloadData() async {
     await FirebaseApi.downloadFile(futureFile.ref);
     final directory = await getExternalStorageDirectory();
     String? path = directory?.path;
-    final file = File('$path/myFile.txt');
+    final file = File('$path/result.txt');
     final contents = await file.readAsString();
     return contents;
   }

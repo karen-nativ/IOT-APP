@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 
+//import 'package:syncfusion_flutter_charts/charts.dart';
+
 
 class StatisticsPage extends StatefulWidget {
    StatisticsPage({Key? key}) : super(key: key);
@@ -17,12 +19,6 @@ class StatisticsPage extends StatefulWidget {
 
 class _StatisticsPageState extends State<StatisticsPage>{
 
-  late Future<List<FirebaseFile>> futureFiles;
-
-  late FirebaseFile statisticsFile;
-
-  String json_content = "!";
-
   late Data objects;
 
   @override
@@ -31,17 +27,6 @@ class _StatisticsPageState extends State<StatisticsPage>{
 
     futureFiles = FirebaseApi.listAll('statistics/');
   }
-
-
-  Future<void> downloadData() async {
-    await FirebaseApi.downloadFile(statisticsFile.ref);
-    final directory = await getExternalStorageDirectory();
-    String? path = directory?.path;
-    final file = File('$path/stats.json');
-    final contents = await file.readAsString();
-    setState(() => json_content = contents);
-  }
-
 
 
   @override
@@ -61,7 +46,6 @@ class _StatisticsPageState extends State<StatisticsPage>{
                   statisticsFile = files[0];
                   downloadData();
                   objects = dataFromJson(json_content);
-                  int bot = objects.bottle.totalTimes;
                   return Scaffold(
                     body: Center(
                       child: Row(
@@ -70,10 +54,13 @@ class _StatisticsPageState extends State<StatisticsPage>{
                           Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                Text("Total things recognized: \n"),
-                                Text("Bottles recognized: $bot \n"),
-                                Text("Faces recognized: \n"),
-                                Text("Total accuracy: \n"),
+                                Text("Total things recognized: ${objects.getTotal()}\n"),
+                                Text("Total accuracy: ${objects.getTotalAccu()}%\n"),
+                                Text("Bottles recognized: ${objects.bottle.totalTimes} (${objects.bottle.getAcc()}%)\n"),
+                                Text("Faces recognized: ${objects.face.totalTimes} (${objects.face.getAcc()}%)\n"),
+                                Text("Bags recognized: ${objects.bag.totalTimes} (${objects.bag.getAcc()}%)\n"),
+                                Text("Phones recognized: ${objects.phone.totalTimes} (${objects.phone.getAcc()}%)\n"),
+                                Text("Watches recognized: ${objects.watch.totalTimes} (${objects.watch.getAcc()}%)\n"),
                               ]
                           ),
                           const Text("Graph here"),
@@ -87,27 +74,6 @@ class _StatisticsPageState extends State<StatisticsPage>{
       )
   );
   }
-
-  /*void updateStatistics(String result)
-  {
-    switch(result) {
-      case 'phone': {
-        phones.totalTimes++;
-      } break;
-      case 'bag': {
-        bags.totalTimes++;
-      } break;
-      case 'watch': {
-        watches.totalTimes++;
-      } break;
-      case 'face': {
-        faces.totalTimes++;
-      } break;
-      case 'bottle': {
-        bottles.totalTimes++;
-      } break;
-    }
-  }*/
 
 }
 
