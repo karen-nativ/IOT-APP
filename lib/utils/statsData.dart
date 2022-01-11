@@ -79,6 +79,17 @@ class Data {
     uploadFile();
   }
 
+  void clearStatistics()
+  {
+    phone = ObjectResults(totalTimes: 0, correct: 0, wrong: 0);
+    bottle = ObjectResults(totalTimes: 0, correct: 0, wrong: 0);
+    face = ObjectResults(totalTimes: 0, correct: 0, wrong: 0);
+    watch = ObjectResults(totalTimes: 0, correct: 0, wrong: 0);
+    bag = ObjectResults(totalTimes: 0, correct: 0, wrong: 0);
+    uploadFile();
+  }
+
+
   void uploadFile() async
   {
     final directory = await getExternalStorageDirectory();

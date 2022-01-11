@@ -67,9 +67,10 @@ class _StatisticsPageState extends State<StatisticsPage>{
                     objects = dataFromJson(json_content);
                     return Scaffold(
                       body: Center(
-                        child: Row(
+                        child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
+                            const Text("Graph here\n"),
                             Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
@@ -82,7 +83,15 @@ class _StatisticsPageState extends State<StatisticsPage>{
                                   Text("Watches recognized: ${objects.watch.totalTimes} (${objects.watch.getAcc()}%)\n"),
                                 ]
                             ),
-                            const Text("Graph here"),
+                            FloatingActionButton(
+                              tooltip: 'Clear',
+                              onPressed: () {
+                                objects.clearStatistics();
+                                downloadData();
+                                objects = dataFromJson(json_content);
+                              },
+                              child: const Icon(Icons.cleaning_services_rounded),
+                            ),
                           ],
                         ),
                       ),
