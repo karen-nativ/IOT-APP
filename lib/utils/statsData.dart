@@ -1,4 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+
+import 'package:face_recognition/api/firebase_api.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:path_provider/path_provider.dart';
 
 Data dataFromJson(String str) => Data.fromJson(json.decode(str));
 String dataToJson(Data data) => json.encode(data.toJson());
@@ -54,23 +60,41 @@ class Data {
   void updateStatistics(String result)
   {
     switch(result) {
-      case 'phone': {
+      case 'Phone': {
         phone.totalTimes++;
       } break;
-      case 'bag': {
+      case 'Bag': {
         bag.totalTimes++;
       } break;
-      case 'watch': {
+      case 'Watch': {
         watch.totalTimes++;
       } break;
-      case 'face': {
+      case 'Face': {
         face.totalTimes++;
       } break;
-      case 'bottle': {
+      case 'Bottle': {
         bottle.totalTimes++;
       } break;
     }
+
+    debugPrint('update: $this');
+
+    uploadFile();
   }
+
+  void uploadFile() async
+  {
+    final directory = await getExternalStorageDirectory();
+    String? path = directory?.path;
+    String json_contents = dataToJson(this);
+    debugPrint('upload: $json_contents');
+    final file = File('$path/stats.json');
+    file.writeAsString(json_contents);
+    await firebase_storage.FirebaseStorage.instance
+        .ref('logs/stats.json')
+        .putFile(file);
+  }
+
 }
 
 

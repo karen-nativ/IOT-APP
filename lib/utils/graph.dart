@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'statsData.dart'
+import 'statsData.dart';
 
 class GroupedBarChart extends StatelessWidget {
   final List<charts.Series> seriesList;
   final bool animate;
 
-  GroupedBarChart(this.seriesList, {this.animate});
+  GroupedBarChart(this.seriesList, {required this.animate});
 
   factory GroupedBarChart.withSampleData(Data data) {
     return new GroupedBarChart(

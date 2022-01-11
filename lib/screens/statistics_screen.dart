@@ -32,7 +32,7 @@ class _StatisticsPageState extends State<StatisticsPage>{
   void initState() {
     super.initState();
 
-    futureFiles = FirebaseApi.listAll('statistics/');
+    futureFiles = FirebaseApi.listAll('logs/');
   }
 
 
@@ -61,7 +61,8 @@ class _StatisticsPageState extends State<StatisticsPage>{
                     return Center(child: Text('Some error occurred!'));
                   } else {
                     final files = snapshot.data!;
-                    statisticsFile = files[0];
+                    files.sort((a, b) => a.name.compareTo(b.name));
+                    statisticsFile = files[1];
                     downloadData();
                     objects = dataFromJson(json_content);
                     return Scaffold(

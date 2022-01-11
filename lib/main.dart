@@ -54,29 +54,40 @@ class _HomePageState extends State<HomePage> {
   bool clicked_classify = false;
   bool clicked_mood = false;
 
-  late Future<List<FirebaseFile>> futureFiles;
+  late Future<List<FirebaseFile>> futureList;
 
-  late FirebaseFile futureFile;
+  late FirebaseFile futureResult;
+
+  late FirebaseFile futureStats;
+
+  String json_content = "!";
+
+  late Data objects;
 
   @override
   void initState() {
     super.initState();
 
-    futureFiles = FirebaseApi.listAll('logs/');
+    futureList = FirebaseApi.listAll('logs/');
   }
 
   void _classify(String contents) {
     setState(() {
       _result = contents;
+      objects.updateStatistics(contents);
     });
   }
 
   Future<String> downloadData() async {
-    await FirebaseApi.downloadFile(futureFile.ref);
+    await FirebaseApi.downloadFile(futureResult.ref);
+    await FirebaseApi.downloadFile(futureStats.ref);
     final directory = await getExternalStorageDirectory();
     String? path = directory?.path;
-    final file = File('$path/result.txt');
-    final contents = await file.readAsString();
+    final resultsFile = File('$path/result.txt');
+    final statsFile = File('$path/stats.json');
+    final contents = await resultsFile.readAsString();
+    final jsonContent = await statsFile.readAsString();
+    setState(() => json_content = jsonContent);
     return contents;
   }
 
@@ -84,7 +95,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context){
     return Scaffold(
       body: FutureBuilder<List<FirebaseFile>>(
-          future: futureFiles,
+          future: futureList,
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
@@ -94,7 +105,9 @@ class _HomePageState extends State<HomePage> {
                   return Center(child: Text('Some error occurred!'));
                 } else {
                   final files = snapshot.data!;
-                  futureFile = files[0];
+                  files.sort((a, b) => a.name.compareTo(b.name));
+                  futureResult = files[0];
+                  futureStats = files[1];
                   return Scaffold(
                     body: Center(
                     // Center is a layout widget. It takes a single child and positions it
@@ -146,8 +159,8 @@ class _HomePageState extends State<HomePage> {
                       child: const Icon(Icons.photo_camera),
                       onPressed: () async {
                         String content = await downloadData();
+                        objects = dataFromJson(json_content);
                         _classify(content);
-                        //updateStatistics(contents);
                         clicked_classify = true;
                         clicked_mood = false;
                       }
