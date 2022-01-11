@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:face_recognition/api/firebase_api.dart';
 import 'package:face_recognition/api/firebase_file.dart';
+import 'package:face_recognition/utils/graph.dart';
 import 'package:face_recognition/utils/statsData.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -75,6 +76,7 @@ class _StatisticsPageState extends State<StatisticsPage>{
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             const Text("Graph here\n"),
+                            GroupedBarChart.withSampleData(objects),
                             Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
