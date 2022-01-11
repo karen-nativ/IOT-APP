@@ -54,7 +54,7 @@ class Data {
       return 0;
     }
     int totalWrong = (watch.wrong + face.wrong + bag.wrong + phone.wrong + bottle.wrong);
-    return (1-totalWrong/total)*100;
+    return double.parse(((1-totalWrong/total)*100).toStringAsPrecision(3));
   }
 
   void updateStatistics(String result)
@@ -185,7 +185,6 @@ class ObjectResults {
     {
       return 0;
     }
-
-    return (1-wrong/totalTimes)*100;
+    return double.parse(((1-wrong/totalTimes)*100).toStringAsPrecision(3));
   }
 }
