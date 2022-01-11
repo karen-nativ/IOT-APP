@@ -79,6 +79,50 @@ class Data {
     uploadFile();
   }
 
+  void updateCorrectStatistics(String result)
+  {
+    switch(result) {
+      case 'Phone': {
+        phone.correct++;
+      } break;
+      case 'Bag': {
+        bag.correct++;
+      } break;
+      case 'Watch': {
+        watch.correct++;
+      } break;
+      case 'Face': {
+        face.correct++;
+      } break;
+      case 'Bottle': {
+        bottle.correct++;
+      } break;
+    }
+    uploadFile();
+  }
+
+  void updateWrongStatistics(String result)
+  {
+    switch(result) {
+      case 'Phone': {
+        phone.wrong++;
+      } break;
+      case 'Bag': {
+        bag.wrong++;
+      } break;
+      case 'Watch': {
+        watch.wrong++;
+      } break;
+      case 'Face': {
+        face.wrong++;
+      } break;
+      case 'Bottle': {
+        bottle.wrong++;
+      } break;
+    }
+    uploadFile();
+  }
+
   void uploadFile() async
   {
     final directory = await getExternalStorageDirectory();

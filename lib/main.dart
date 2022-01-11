@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
   void _classify(String contents) {
     setState(() {
       _result = contents;
-      objects.updateStatistics(contents);
+      objects.updateStatistics(_result);
     });
   }
 
@@ -129,6 +129,7 @@ class _HomePageState extends State<HomePage> {
                                 FloatingActionButton(
                                   tooltip: 'Correct!',
                                   onPressed: () {
+                                    objects.updateCorrectStatistics(_result);
                                     clicked_mood = true;
                                     setState(() {});
                                   },
@@ -137,6 +138,7 @@ class _HomePageState extends State<HomePage> {
                                 FloatingActionButton(
                                   tooltip: 'False!',
                                   onPressed: () {
+                                    objects.updateWrongStatistics(_result);
                                     clicked_mood = true;
                                     setState(() {});
                                   },
