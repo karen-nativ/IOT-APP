@@ -22,14 +22,6 @@
           }
         },
         {
-          "client_id": "712010388975-ge8qmledatnnt0aoa9jgn2iik5gbioss.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.face_recognition",
-            "certificate_hash": "569dc24f3f102b6c7ab5aede5229d9e783f68c08"
-          }
-        },
-        {
           "client_id": "712010388975-0jq2ej3505fp6am41ehk7v1lcqelhma0.apps.googleusercontent.com",
           "client_type": 3
         }
