@@ -1,12 +1,8 @@
 import 'dart:convert';
-import 'dart:io';
-
-import 'package:face_recognition/api/firebase_api.dart';
-import 'package:face_recognition/api/firebase_file.dart';
-import 'package:path_provider/path_provider.dart';
 
 Data dataFromJson(String str) => Data.fromJson(json.decode(str));
 String dataToJson(Data data) => json.encode(data.toJson());
+
 
 class Data {
   Data({
@@ -22,16 +18,6 @@ class Data {
   ObjectResults phone;
   ObjectResults watch;
   ObjectResults face;
-
-  late Future<List<FirebaseFile>> futureFiles;
-
-  late FirebaseFile statisticsFile;
-
-  String json_content = "!";
-
-  Data createInstance() {
-    statisticsFile = downloadData()
-  }
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     bottle: ObjectResults.fromJson(json["bottle"]),
@@ -49,15 +35,6 @@ class Data {
     "face": face.toJson(),
   };
 
-  Future<void> downloadData() async {
-    await FirebaseApi.downloadFile(statisticsFile.ref);
-    final directory = await getExternalStorageDirectory();
-    String? path = directory?.path;
-    final file = File('$path/stats.json');
-    final contents = await file.readAsString();
-    json_content = contents;
-  }
-
   num getTotal()
   {
     return (watch.totalTimes + face.totalTimes + bag.totalTimes + phone.totalTimes + bottle.totalTimes);
@@ -67,9 +44,9 @@ class Data {
   {
     num total = getTotal();
     if(total == 0)
-      {
-        return 0;
-      }
+    {
+      return 0;
+    }
     int totalWrong = (watch.wrong + face.wrong + bag.wrong + phone.wrong + bottle.wrong);
     return (1-totalWrong/total)*100;
   }

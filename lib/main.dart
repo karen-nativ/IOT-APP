@@ -69,7 +69,6 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _result = contents;
     });
-    Data.updateStatistics(contents);
   }
 
   Future<String> downloadData() async {
