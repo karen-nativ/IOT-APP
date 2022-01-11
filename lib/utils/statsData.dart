@@ -76,9 +76,6 @@ class Data {
         bottle.totalTimes++;
       } break;
     }
-
-    debugPrint('update: $this');
-
     uploadFile();
   }
 
@@ -87,7 +84,6 @@ class Data {
     final directory = await getExternalStorageDirectory();
     String? path = directory?.path;
     String json_contents = dataToJson(this);
-    debugPrint('upload: $json_contents');
     final file = File('$path/stats.json');
     file.writeAsString(json_contents);
     await firebase_storage.FirebaseStorage.instance

@@ -31,7 +31,6 @@ class FirebaseApi {
   static Future downloadFile(Reference ref) async {
     final dir = await getExternalStorageDirectory();
     final file = File('${dir?.path}/${ref.name}');
-    debugPrint('dir: ${dir?.path}');
     await ref.writeToFile(file);
   }
 }
