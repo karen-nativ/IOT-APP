@@ -64,6 +64,10 @@ class _StatisticsPageState extends State<StatisticsPage>{
                     files.sort((a, b) => a.name.compareTo(b.name));
                     statisticsFile = files[1];
                     downloadData();
+                    if(json_content == "!")
+                    {
+                      return Center(child: CircularProgressIndicator());
+                    }
                     objects = dataFromJson(json_content);
                     return Scaffold(
                       body: Center(
