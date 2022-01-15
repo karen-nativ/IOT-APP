@@ -115,6 +115,13 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
+                          Text(
+                            _result,
+                            style: Theme
+                                .of(context)
+                                .textTheme
+                                .headline4,
+                          ),
                           if(clicked_classify && !clicked_mood) ... [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
