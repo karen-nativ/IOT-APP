@@ -146,19 +146,14 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ],
                             ),
-                            Text('Click here to classify again:'),
-                        ]
-                        else if(clicked_classify) ... [
-                            Text('Click here to classify again:'),
-                        ]
-                        else
-                          Text('Click here to classify:'),
+                            //Text('Click here to classify again:'),
+                          ]
                         ],
                       ),
                     ),
-                    floatingActionButton: FloatingActionButton(
-                      tooltip: 'Classify picture',
-                      child: const Icon(Icons.photo_camera),
+                    floatingActionButton: FloatingActionButton.extended(
+                      label: Text('Classify picture'),
+                      icon: const Icon(Icons.photo_camera),
                       onPressed: () async {
                         String content = await downloadData();
                         objects = dataFromJson(json_content);
