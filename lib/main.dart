@@ -32,8 +32,9 @@ class _MyAppState extends State<MyApp> {
       title: 'SecuRecognize', //Tab text
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.indigo,
+        primarySwatch: Colors.purple,
         brightness: Brightness.dark,
+        //textTheme: ,
       ),
       home: SignInScreen()
     );

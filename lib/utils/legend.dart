@@ -27,21 +27,6 @@ class GroupedBarChart extends StatelessWidget {
       animate: animate,
       barGroupingType: charts.BarGroupingType.grouped,
       behaviors: [new charts.SeriesLegend()],
-      domainAxis: new charts.OrdinalAxisSpec(
-          renderSpec: new charts.SmallTickRendererSpec(
-            labelStyle: new charts.TextStyleSpec(
-                  fontSize: 18, // size in Pts.
-                  color: charts.MaterialPalette.white),
-              lineStyle: new charts.LineStyleSpec(
-                  color: charts.MaterialPalette.white))),
-      /// Assign a custom style for the measure axis.
-      primaryMeasureAxis: new charts.NumericAxisSpec(
-          renderSpec: new charts.GridlineRendererSpec(
-              labelStyle: new charts.TextStyleSpec(
-                  fontSize: 18, // size in Pts.
-                  color: charts.MaterialPalette.white),
-              lineStyle: new charts.LineStyleSpec(
-                  color: charts.MaterialPalette.white))),
     );
   }
 
@@ -78,21 +63,18 @@ class GroupedBarChart extends StatelessWidget {
         domainFn: (ObjectType type, _) => type.name,
         measureFn: (ObjectType type, _) => type.amount,
         data: TotalData,
-        colorFn: (_, __) => charts.ColorUtil.fromDartColor(Colors.lightBlueAccent)
       ),
       new charts.Series<ObjectType, String>(
         id: 'Right',
         domainFn: (ObjectType type, _) => type.name,
         measureFn: (ObjectType type, _) => type.amount,
         data: RightData,
-        colorFn: (_, __) => charts.ColorUtil.fromDartColor(const Color(0xFF6BFF90))
       ),
       new charts.Series<ObjectType, String>(
         id: 'Wrong',
         domainFn: (ObjectType type, _) => type.name,
         measureFn: (ObjectType type, _) => type.amount,
         data: WrongData,
-          colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault
       ),
     ];
   }

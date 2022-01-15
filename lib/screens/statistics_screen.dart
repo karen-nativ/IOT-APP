@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:face_recognition/api/firebase_api.dart';
 import 'package:face_recognition/api/firebase_file.dart';
 import 'package:face_recognition/utils/graph.dart';
@@ -75,12 +73,13 @@ class _StatisticsPageState extends State<StatisticsPage>{
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            const Text("Graph here\n"),
-                            GroupedBarChart.withSampleData(objects),
+                            Expanded(
+                              child: GroupedBarChart.withSampleData(objects),
+                            ),
                             Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  Text("Total things recognized: ${objects.getTotal()}\n"),
+                                  Text("\nTotal things recognized: ${objects.getTotal()}\n"),
                                   Text("Total accuracy: ${objects.getTotalAccu()}%\n"),
                                   Text("Bottles recognized: ${objects.bottle.totalTimes} (${objects.bottle.getAcc()}%)\n"),
                                   Text("Faces recognized: ${objects.face.totalTimes} (${objects.face.getAcc()}%)\n"),
