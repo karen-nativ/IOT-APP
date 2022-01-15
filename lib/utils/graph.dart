@@ -3,7 +3,7 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'statsData.dart';
 
 class GroupedBarChart extends StatelessWidget {
-  final List<charts.Series> seriesList;
+  final List<charts.Series<ObjectType, String>> seriesList;
   final bool animate;
 
   GroupedBarChart(this.seriesList, {required this.animate});
