@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:face_recognition/screens/sign_in_screen.dart';
@@ -65,11 +66,22 @@ class _HomePageState extends State<HomePage> {
 
   late Data objects;
 
+  bool _enabled = true;
+
   @override
   void initState() {
     super.initState();
-
     futureList = FirebaseApi.listAll('logs/');
+  }
+
+  void _onPressed() async {
+  String content = await downloadData();
+  objects = dataFromJson(json_content);
+  _classify(content);
+  clicked_classify = true;
+  clicked_mood = false;
+  setState(() => _enabled = false);
+  Timer(Duration(milliseconds: 10), () => setState(() => _enabled = true));
   }
 
   void _classify(String contents) {
@@ -153,15 +165,9 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     floatingActionButton: FloatingActionButton.extended(
-                      label: Text('Classify picture'),
+                      label: clicked_classify ? Text('Classify again') : Text("Classify picture"),
                       icon: const Icon(Icons.photo_camera),
-                      onPressed: () async {
-                        String content = await downloadData();
-                        objects = dataFromJson(json_content);
-                        _classify(content);
-                        clicked_classify = true;
-                        clicked_mood = false;
-                      }
+                      onPressed: _enabled ? _onPressed: null,
                     ),
                     floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
                   );

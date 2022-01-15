@@ -79,7 +79,7 @@ class Data {
     uploadFile();
   }
 
-  void clearStatistics()
+  String clearStatistics()
   {
     phone = ObjectResults(totalTimes: 0, correct: 0, wrong: 0);
     bottle = ObjectResults(totalTimes: 0, correct: 0, wrong: 0);
@@ -87,6 +87,7 @@ class Data {
     watch = ObjectResults(totalTimes: 0, correct: 0, wrong: 0);
     bag = ObjectResults(totalTimes: 0, correct: 0, wrong: 0);
     uploadFile();
+    return dataToJson(this);
   }
 
   void updateCorrectStatistics(String result)

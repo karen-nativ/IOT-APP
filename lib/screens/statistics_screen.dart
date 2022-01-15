@@ -27,11 +27,16 @@ class _StatisticsPageState extends State<StatisticsPage>{
 
   late Data objects;
 
+  bool downloaded = false;
+
+  bool _enabled = true;
+
   @override
   void initState() {
     super.initState();
 
     futureFiles = FirebaseApi.listAll('logs/');
+
   }
 
 
@@ -45,8 +50,13 @@ class _StatisticsPageState extends State<StatisticsPage>{
   }
 
 
+  void _onPressed() async {
+    String cleared = objects.clearStatistics();
+    objects = dataFromJson(cleared);
+    setState(() {});
+  }
 
-  @override
+    @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: FutureBuilder<List<FirebaseFile>>(
@@ -62,12 +72,17 @@ class _StatisticsPageState extends State<StatisticsPage>{
                     final files = snapshot.data!;
                     files.sort((a, b) => a.name.compareTo(b.name));
                     statisticsFile = files[1];
-                    downloadData();
                     if(json_content == "!")
                     {
+                      downloadData();
                       return Center(child: CircularProgressIndicator());
                     }
-                    objects = dataFromJson(json_content);
+                    if(!downloaded)
+                    {
+                      downloadData();
+                      objects = dataFromJson(json_content);
+                      downloaded = true;
+                    }
                     return Scaffold(
                       body: Center(
                         child: Column(
@@ -88,15 +103,11 @@ class _StatisticsPageState extends State<StatisticsPage>{
                                   Text("Watches recognized: ${objects.watch.totalTimes} (${objects.watch.getAcc()}%)\n"),
                                 ]
                             ),
-                            FloatingActionButton(
-                              tooltip: 'Clear',
-                              onPressed: () {
-                                objects.clearStatistics();
-                                downloadData();
-                                objects = dataFromJson(json_content);
-                              },
-                              child: const Icon(Icons.cleaning_services_rounded),
-                            ),
+                              FloatingActionButton(
+                                tooltip: 'Clear',
+                                  onPressed: _enabled ? _onPressed: null,
+                                  child: const Icon(Icons.cleaning_services_rounded),
+                              ),
                           ],
                         ),
                       ),
