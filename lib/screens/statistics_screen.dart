@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:face_recognition/api/firebase_api.dart';
 import 'package:face_recognition/api/firebase_file.dart';
 import 'package:face_recognition/utils/graph.dart';
@@ -53,7 +55,9 @@ class _StatisticsPageState extends State<StatisticsPage>{
   void _onPressed() async {
     String cleared = objects.clearStatistics();
     objects = dataFromJson(cleared);
-    setState(() {});
+    //setState(() {});
+    setState(() => _enabled = false);
+    Timer(Duration(milliseconds: 200), () => setState(() => _enabled = true));
   }
 
     @override

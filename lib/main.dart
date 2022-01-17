@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
   clicked_classify = true;
   clicked_mood = false;
   setState(() => _enabled = false);
-  Timer(Duration(milliseconds: 10), () => setState(() => _enabled = true));
+  Timer(Duration(milliseconds: 200), () => setState(() => _enabled = true));
   }
 
   void _classify(String contents) {
