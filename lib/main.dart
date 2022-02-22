@@ -66,6 +66,8 @@ class _HomePageState extends State<HomePage> {
 
   late Data objects;
 
+  bool loading = false;
+
   bool _enabled = true;
 
   @override
@@ -75,13 +77,20 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onPressed() async {
-  String content = await downloadData();
-  objects = dataFromJson(json_content);
-  _classify(content);
-  clicked_classify = true;
-  clicked_mood = false;
-  setState(() => _enabled = false);
-  Timer(Duration(milliseconds: 200), () => setState(() => _enabled = true));
+    setState(() {
+      _enabled = false;
+      loading = true;
+    } );
+    String content = await downloadData();
+    objects = dataFromJson(json_content);
+    _classify(content);
+    clicked_classify = true;
+    clicked_mood = false;
+    Timer(Duration(milliseconds: 500), () => setState(() {
+      _enabled = true;
+      loading = false;
+    }
+    ));
   }
 
   void _classify(String contents) {
@@ -110,6 +119,10 @@ class _HomePageState extends State<HomePage> {
       body: FutureBuilder<List<FirebaseFile>>(
           future: futureList,
           builder: (context, snapshot) {
+            if(loading)
+            {
+              return Center(child: CircularProgressIndicator());
+            }
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
                 return Center(child: CircularProgressIndicator());
