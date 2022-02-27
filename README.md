@@ -7,7 +7,7 @@ The project is essentialy a remote controlled system which recognizes and classi
 In order to use the project please follow these steps:
 1. Clone the repository and open the code in Android Studio.
 2. Install the application to your android device or to an emulator.
-3. Turn on the raspberry pi.
+3. Turn on the raspberry pi and connect it to the internet.
 4. Point the camera towards objects you want recognized.
 5. Control the camera using the app.
 
